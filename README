@@ -1,0 +1,17 @@
+A preliminary Jena adapter (read: a Java LDF Client)
+--------------------------------------------------------------------------------------
+
+It currently supports simple queries and single joins (maybe others as well, but that is unsure).
+
+For example, use as a Jena Model:
+
+	LinkedDataFragmentGraph ldfg = new LinkedDataFragmentGraph("http://data.linkeddatafragments.org/dbpedia");
+	Model model = ModelFactory.createModelForGraph(ldfg);
+
+Queries:
+
+	SELECT ?p ?o WHERE { <http://dbpedia.org/resource/Barack_Obama> ?p ?o }
+
+or
+
+	SELECT ?o ?n WHERE { <http://dbpedia.org/resource/Barack_Obama> <http://dbpedia.org/ontology/almaMater> ?o . ?o <http://dbpedia.org/ontology/state> ?n }
