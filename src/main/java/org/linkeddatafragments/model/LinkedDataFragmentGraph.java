@@ -1,10 +1,5 @@
-package be.mmlab.ldfjena.model;
+package org.linkeddatafragments.model;
 
-import be.mmlab.ldfjena.LinkedDataFragmentsClient;
-import be.mmlab.ldfjena.solver.LDFStatistics;
-import be.mmlab.ldfjena.solver.LinkedDataFragmentEngine;
-import be.mmlab.ldfjena.solver.OpExecutorLDF;
-import be.mmlab.ldfjena.solver.ReorderTransformationLDF;
 import com.google.common.primitives.Ints;
 import com.hp.hpl.jena.graph.*;
 import com.hp.hpl.jena.graph.impl.GraphBase;
@@ -20,6 +15,12 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 import com.hp.hpl.jena.util.iterator.WrappedIterator;
 
 import java.util.Iterator;
+
+import org.linkeddatafragments.client.LinkedDataFragmentsClient;
+import org.linkeddatafragments.solver.LDFStatistics;
+import org.linkeddatafragments.solver.LinkedDataFragmentEngine;
+import org.linkeddatafragments.solver.OpExecutorLDF;
+import org.linkeddatafragments.solver.ReorderTransformationLDF;
 
 public class LinkedDataFragmentGraph extends GraphBase {
     protected final LinkedDataFragmentsClient ldfClient;

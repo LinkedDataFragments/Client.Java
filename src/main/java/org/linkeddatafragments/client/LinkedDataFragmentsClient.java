@@ -1,8 +1,5 @@
-package be.mmlab.ldfjena;
+package org.linkeddatafragments.client;
 
-import be.mmlab.ldfjena.model.LinkedDataFragmentFactory;
-import be.mmlab.ldfjena.model.LinkedDataFragment;
-import be.mmlab.ldfjena.model.LinkedDataFragmentIterator;
 import com.google.common.base.Optional;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -15,6 +12,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.reasoner.TriplePattern;
 import com.hp.hpl.jena.sparql.graph.GraphFactory;
 import com.hp.hpl.jena.util.iterator.WrappedIterator;
+
 import org.apache.http.Header;
 import org.apache.http.HeaderElement;
 import org.apache.http.HttpResponse;
@@ -23,6 +21,9 @@ import org.apache.http.client.methods.HttpHead;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
+import org.linkeddatafragments.model.LinkedDataFragment;
+import org.linkeddatafragments.model.LinkedDataFragmentFactory;
+import org.linkeddatafragments.model.LinkedDataFragmentIterator;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,4 +1,4 @@
-package be.mmlab.ldfjena.solver;
+package org.linkeddatafragments.solver;
 
 import java.util.Iterator;
 

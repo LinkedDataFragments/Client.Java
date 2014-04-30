@@ -1,4 +1,4 @@
-package be.mmlab.ldfjena.model;
+package org.linkeddatafragments.model;
 
 import com.hp.hpl.jena.graph.Capabilities;
 

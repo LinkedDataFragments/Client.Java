@@ -1,6 +1,7 @@
-package be.mmlab.ldfjena.solver;
+package org.linkeddatafragments.solver;
 
-import be.mmlab.ldfjena.model.LinkedDataFragmentGraph;
+import org.linkeddatafragments.model.LinkedDataFragmentGraph;
+
 import com.hp.hpl.jena.graph.GraphStatisticsHandler;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.sparql.engine.optimizer.Pattern;

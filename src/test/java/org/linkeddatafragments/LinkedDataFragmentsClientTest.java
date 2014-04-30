@@ -1,14 +1,15 @@
-package be.mmlab.ldfjena;
+package org.linkeddatafragments;
 
-import be.mmlab.ldfjena.model.LinkedDataFragmentGraph;
-import be.mmlab.ldfjena.util.LDFTestUtils;
 import com.google.common.base.Stopwatch;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.query.*;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+
 import org.junit.Before;
 import org.junit.Test;
+import org.linkeddatafragments.model.LinkedDataFragmentGraph;
+import org.linkeddatafragments.util.LDFTestUtils;
 
 import java.util.Iterator;
 import java.util.List;

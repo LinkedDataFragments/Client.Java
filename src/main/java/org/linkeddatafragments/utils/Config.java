@@ -1,4 +1,4 @@
-package be.mmlab.ldfjena.utils;
+package org.linkeddatafragments.utils;
 
 import com.google.common.collect.Maps;
 

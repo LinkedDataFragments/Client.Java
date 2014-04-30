@@ -1,6 +1,7 @@
-package be.mmlab.ldfjena.model;
+package org.linkeddatafragments.model;
 
-import be.mmlab.ldfjena.model.LinkedDataFragment;
+import org.linkeddatafragments.model.LinkedDataFragment;
+
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.graph.TripleMatch;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;

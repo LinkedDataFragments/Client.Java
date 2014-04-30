@@ -1,6 +1,7 @@
-package be.mmlab.ldfjena.solver;
+package org.linkeddatafragments.solver;
 
-import be.mmlab.ldfjena.model.LinkedDataFragmentGraph;
+import org.linkeddatafragments.model.LinkedDataFragmentGraph;
+
 import com.hp.hpl.jena.sparql.ARQInternalErrorException;
 import com.hp.hpl.jena.sparql.algebra.Op;
 import com.hp.hpl.jena.sparql.algebra.op.OpBGP;

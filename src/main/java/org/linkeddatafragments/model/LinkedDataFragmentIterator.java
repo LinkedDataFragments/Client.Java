@@ -1,9 +1,10 @@
-package be.mmlab.ldfjena.model;
+package org.linkeddatafragments.model;
 
-import be.mmlab.ldfjena.LinkedDataFragmentsClient;
 import com.hp.hpl.jena.graph.TripleMatch;
 
 import java.util.Iterator;
+
+import org.linkeddatafragments.client.LinkedDataFragmentsClient;
 
 /**
  * Created by ldevocht on 4/25/14.

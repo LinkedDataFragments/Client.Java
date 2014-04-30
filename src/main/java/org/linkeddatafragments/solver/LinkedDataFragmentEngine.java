@@ -1,4 +1,4 @@
-package be.mmlab.ldfjena.solver;
+package org.linkeddatafragments.solver;
 
 /**
  * Created by ldevocht on 4/28/14.

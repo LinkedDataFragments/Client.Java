@@ -1,4 +1,4 @@
-package be.mmlab.ldfjena;
+package org.linkeddatafragments.client;
 
 /**
  * Created by ldevocht on 4/28/14.
@@ -8,7 +8,8 @@ import com.hp.hpl.jena.sparql.util.graph.GraphUtils;
 
 import java.io.IOException;
 
-import be.mmlab.ldfjena.model.LinkedDataFragmentGraph;
+import org.linkeddatafragments.model.LinkedDataFragmentGraph;
+
 import com.hp.hpl.jena.assembler.Assembler;
 import com.hp.hpl.jena.assembler.Mode;
 import com.hp.hpl.jena.assembler.assemblers.AssemblerBase;

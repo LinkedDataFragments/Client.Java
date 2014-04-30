@@ -1,4 +1,4 @@
-package be.mmlab.ldfjena.util;
+package org.linkeddatafragments.util;
 
 import com.google.common.collect.Lists;
 import org.apache.commons.io.FileUtils;

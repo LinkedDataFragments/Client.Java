@@ -1,7 +1,5 @@
-package be.mmlab.ldfjena;
+package org.linkeddatafragments.client;
 
-import be.mmlab.ldfjena.model.LinkedDataFragmentGraph;
-import be.mmlab.ldfjena.utils.Config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
@@ -16,6 +14,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Iterator;
+
+import org.linkeddatafragments.model.LinkedDataFragmentGraph;
+import org.linkeddatafragments.utils.Config;
 
 /**
  * Created by ldevocht on 4/29/14.
