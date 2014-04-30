@@ -3,11 +3,7 @@ package org.linkeddatafragments.client;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.query.Query;
-import com.hp.hpl.jena.query.QueryExecution;
-import com.hp.hpl.jena.query.QueryExecutionFactory;
-import com.hp.hpl.jena.query.QueryFactory;
-import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.query.*;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 
@@ -21,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Iterator;
 
+import com.hp.hpl.jena.shared.PrefixMapping;
 import org.linkeddatafragments.model.LinkedDataFragmentGraph;
 import org.linkeddatafragments.utils.Config;
 
@@ -104,9 +101,13 @@ public class QueryResultsWriter {
             System.exit(1);
             return;
         }
-        final Query query = QueryFactory.create(queryText);
-        for (final String prefix : config.prefixes.keySet())
-            query.setPrefix(prefix, config.prefixes.get(prefix));
+
+        // Query prefixes must be applied before the query is parsed.
+        final Query query = QueryFactory.create();
+        PrefixMapping pm = PrefixMapping.Factory.create();
+        pm.setNsPrefixes(config.prefixes);
+        query.setPrefixMapping(pm);
+        QueryFactory.parse(query, queryText, null, Syntax.syntaxSPARQL);
 
         // Execute the query over the graph and write its results
         final LinkedDataFragmentGraph graph = new LinkedDataFragmentGraph(config.datasource);
