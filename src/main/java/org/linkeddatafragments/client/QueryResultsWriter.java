@@ -71,12 +71,9 @@ public class QueryResultsWriter {
      * @param args The command-line arguments.
      */
     public static void main(final String[] args) {
-        // Verify and parse arguments
-        if (args.length < 1 || args.length > 2 || args[0].matches("/^--?h(elp)?$/")) {
-            System.err.println("usage: java -jar ldf-client.jar [config.json] query");
-            System.exit(1);
-            return;
-        }
+        // Verify arguments
+        if (args.length < 1 || args.length > 2 || args[0].matches("/^--?h(elp)?$/"))
+            error("usage: java -jar ldf-client.jar [config.json] query");
         final boolean hasConfig = args.length >= 2;
 
         // Read the configuration
@@ -85,8 +82,7 @@ public class QueryResultsWriter {
         try {
             configReader = new JsonReader(new FileReader(configFile));
         } catch (FileNotFoundException e) {
-            System.out.println("Config file could not be found.");
-            System.exit(1);
+            error("Config file could not be found.");
             return;
         }
         final Config config = new Gson().fromJson(configReader, Config.class);
@@ -97,8 +93,7 @@ public class QueryResultsWriter {
         try {
             queryText = new String(Files.readAllBytes(Paths.get(queryFilePath)), StandardCharsets.UTF_8);
         } catch (IOException e) {
-            System.out.println("Query file could not be read.");
-            System.exit(1);
+            error("Query file could not be read.");
             return;
         }
 
@@ -113,5 +108,14 @@ public class QueryResultsWriter {
         final LinkedDataFragmentGraph graph = new LinkedDataFragmentGraph(config.datasource);
         new QueryResultsWriter(ModelFactory.createModelForGraph(graph), query).writeResults(System.out);
         System.exit(0);
+    }
+
+    /**
+     * Writes the error message and exits the application.
+     * @param message The error message.
+     */
+    private static void error(String message) {
+        System.err.println(message);
+        System.exit(1);
     }
 }
