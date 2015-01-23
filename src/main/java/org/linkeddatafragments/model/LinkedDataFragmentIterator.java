@@ -27,12 +27,10 @@ public class LinkedDataFragmentIterator implements Iterator<LinkedDataFragment> 
         return new LinkedDataFragmentIterator(ldf, c);
     }
 
-    @Override
     public boolean hasNext() {
         return currentFragment.hasNextUrl();
     }
 
-    @Override
     public LinkedDataFragment next() {
         try {
             currentFragment = ldfClient.getFragment("GET", currentFragment.getNextUrl(), this.tripleTemplate);
@@ -42,7 +40,6 @@ public class LinkedDataFragmentIterator implements Iterator<LinkedDataFragment> 
         return currentFragment;
     }
 
-    @Override
     public void remove() {
         throw new UnsupportedOperationException();
     }

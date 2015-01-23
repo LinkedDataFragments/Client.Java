@@ -28,47 +28,38 @@ public class ExtendedTripleIteratorLDF implements ExtendedIterator<Triple> {
         return new ExtendedTripleIteratorLDF(ldfClient, ldf);
     }
 
-    @Override
     public Triple removeNext() {
         return triples.removeNext();
     }
 
-    @Override
     public <X extends Triple> ExtendedIterator<Triple> andThen(Iterator<X> other) {
         throw new UnsupportedOperationException();
     }
 
-    @Override
     public ExtendedIterator<Triple> filterKeep(Filter<Triple> f) {
         return triples.filterKeep(f);
     }
 
-    @Override
     public ExtendedIterator<Triple> filterDrop(Filter<Triple> f) {
         return triples.filterDrop(f);
     }
 
-    @Override
     public <U> ExtendedIterator<U> mapWith(Map1<Triple, U> map1) {
         return triples.mapWith(map1);
     }
 
-    @Override
     public List<Triple> toList() {
         return triples.toList();
     }
 
-    @Override
     public Set<Triple> toSet() {
         return triples.toSet();
     }
 
-    @Override
     public void close() {
         triples.close();
     }
 
-    @Override
     public boolean hasNext() {
         Boolean hasNext = triples.hasNext();
         if(!hasNext) {
@@ -83,7 +74,6 @@ public class ExtendedTripleIteratorLDF implements ExtendedIterator<Triple> {
         return hasNext;
     }
 
-    @Override
     public Triple next() {
         Boolean hasNext = triples.hasNext();
         if(!hasNext) {
@@ -97,7 +87,6 @@ public class ExtendedTripleIteratorLDF implements ExtendedIterator<Triple> {
         return triples.next();
     }
 
-    @Override
     public void remove() {
 
     }

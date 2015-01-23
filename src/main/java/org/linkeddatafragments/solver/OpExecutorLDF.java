@@ -25,7 +25,6 @@ public class OpExecutorLDF extends OpExecutor {
 
     public final static OpExecutorFactory opExecFactoryLDF = new OpExecutorFactory()
     {
-        @Override
         public OpExecutor create(ExecutionContext execCxt)
         {
             return new OpExecutorLDF(execCxt) ;
@@ -170,7 +169,6 @@ public class OpExecutorLDF extends OpExecutor {
     private static OpExecutorFactory plainFactory = new OpExecutorPlainFactoryLDF() ;
     private static class OpExecutorPlainFactoryLDF implements OpExecutorFactory
     {
-        @Override
         public OpExecutor create(ExecutionContext execCxt)
         {
             return new OpExecutorPlainLDF(execCxt) ;
