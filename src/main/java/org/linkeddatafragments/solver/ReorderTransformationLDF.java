@@ -7,7 +7,7 @@ import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.sparql.engine.optimizer.Pattern;
 import com.hp.hpl.jena.sparql.engine.optimizer.StatsMatcher;
 import com.hp.hpl.jena.sparql.engine.optimizer.reorder.PatternTriple;
-import com.hp.hpl.jena.sparql.engine.optimizer.reorder.ReorderTransformationBase;
+import com.hp.hpl.jena.sparql.engine.optimizer.reorder.ReorderTransformationSubstitution;
 import com.hp.hpl.jena.sparql.graph.NodeConst;
 import com.hp.hpl.jena.sparql.sse.Item;
 
@@ -24,7 +24,7 @@ import static com.hp.hpl.jena.sparql.engine.optimizer.reorder.PatternElements.VA
  * @author ldevocht
  *
  */
-public class ReorderTransformationLDF extends ReorderTransformationBase {
+public class ReorderTransformationLDF extends ReorderTransformationSubstitution {
 
     /** Maximum value for a match involving two terms. */
     public final long multiTermMax ;

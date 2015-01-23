@@ -25,27 +25,22 @@ public class BindingOne implements Binding
         this.value = node;
     }
 
-    @Override
     public int size() { return 1 ; }
 
-    @Override
     public boolean isEmpty() { return false ; }
 
     /** Iterate over all the names of variables.
      */
-    @Override
     public Iterator<Var> vars()
     {
         return Iter.singleton(var) ;
     }
 
-    @Override
     public boolean contains(Var n)
     {
         return var.equals(n) ;
     }
 
-    @Override
     public Node get(Var v)
     {
         if ( v.equals(var) )
