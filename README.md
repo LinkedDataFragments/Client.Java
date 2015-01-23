@@ -1,6 +1,6 @@
 # Linked Data Fragments Client <img src="http://linkeddatafragments.org/images/logo.svg" width="100" align="right" alt="" />
 
-This adapter lets you use [basic Linked Data Fragments](http://linkeddatafragments.org/in-depth/#basic-ldf) in Jena.
+This adapter lets you use [Triple Pattern Fragments](http://linkeddatafragments.org/in-depth/#tpf) in Jena.
 
 For example, use as a Jena Model:
 
