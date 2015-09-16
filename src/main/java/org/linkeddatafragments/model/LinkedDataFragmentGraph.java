@@ -14,8 +14,6 @@ import com.hp.hpl.jena.util.iterator.ClosableIterator;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 import com.hp.hpl.jena.util.iterator.WrappedIterator;
 
-import java.util.Iterator;
-
 import org.linkeddatafragments.client.LinkedDataFragmentsClient;
 import org.linkeddatafragments.solver.LDFStatistics;
 import org.linkeddatafragments.solver.LinkedDataFragmentEngine;
@@ -173,6 +171,11 @@ public class LinkedDataFragmentGraph extends GraphBase {
         it.close();
         b.append( "}" );
         return b.toString();
+    }
+
+    @Override
+    protected ExtendedIterator<Triple> graphBaseFind(Triple triple) {
+        return find(triple);
     }
 
 }
