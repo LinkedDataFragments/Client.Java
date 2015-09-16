@@ -7,12 +7,12 @@ import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.sparql.engine.optimizer.Pattern;
 import com.hp.hpl.jena.sparql.engine.optimizer.StatsMatcher;
 import com.hp.hpl.jena.sparql.engine.optimizer.reorder.PatternTriple;
-import com.hp.hpl.jena.sparql.engine.optimizer.reorder.ReorderTransformationBase;
 import com.hp.hpl.jena.sparql.graph.NodeConst;
 import com.hp.hpl.jena.sparql.sse.Item;
 
 import static com.hp.hpl.jena.sparql.engine.optimizer.reorder.PatternElements.TERM;
 import static com.hp.hpl.jena.sparql.engine.optimizer.reorder.PatternElements.VAR;
+import com.hp.hpl.jena.sparql.engine.optimizer.reorder.ReorderTransformationSubstitution;
 
 /**
  * Reorders the Triple Patterns of a BGP by using statistics directly fetched from
@@ -24,7 +24,7 @@ import static com.hp.hpl.jena.sparql.engine.optimizer.reorder.PatternElements.VA
  * @author ldevocht
  *
  */
-public class ReorderTransformationLDF extends ReorderTransformationBase {
+public class ReorderTransformationLDF extends ReorderTransformationSubstitution {
 
     /** Maximum value for a match involving two terms. */
     public final long multiTermMax ;
@@ -61,7 +61,6 @@ public class ReorderTransformationLDF extends ReorderTransformationBase {
         matcher.addPattern(new Pattern(numTriples, VAR, VAR, VAR));     // ???
     }
 
-    @Override
     protected double weight(PatternTriple pt)
     {
         // If all are nodes, there are no substitutions. We can get the exact number.

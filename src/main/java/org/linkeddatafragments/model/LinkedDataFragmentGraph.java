@@ -175,4 +175,9 @@ public class LinkedDataFragmentGraph extends GraphBase {
         return b.toString();
     }
 
+    @Override
+    protected ExtendedIterator<Triple> graphBaseFind(Triple triple) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }
