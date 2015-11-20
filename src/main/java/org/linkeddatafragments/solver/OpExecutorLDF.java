@@ -100,13 +100,13 @@ public class OpExecutorLDF extends OpExecutor {
     private static QueryIterator optimizeExecuteTriples(LinkedDataFragmentGraph graph,
                                                         QueryIterator input, BasicPattern pattern, ExprList exprs,
                                                         ExecutionContext execCxt) {
-        if ( ! input.hasNext() )
+        if ( ! input.hasNext() ) {
             return input ;
+        }
 
         // -- Input
         // Must pass this iterator into the next stage.
-        if ( pattern.size() >= 2 )
-        {
+        if ( pattern.size() >= 2 ) {
             // Must be 2 or triples to reorder.
             ReorderTransformation transform = graph.getReorderTransform() ;
             if ( transform != null )
@@ -128,8 +128,7 @@ public class OpExecutorLDF extends OpExecutor {
     }
 
     /** Execute without modification of the op - does <b>not</b> apply special graph name translations */
-    private static QueryIterator plainExecute(Op op, QueryIterator input, ExecutionContext execCxt)
-    {
+    private static QueryIterator plainExecute(Op op, QueryIterator input, ExecutionContext execCxt) {
         // -- Execute
         // Switch to a non-reordering executor
         // The Op may be a sequence due to TransformFilterPlacement
@@ -145,19 +144,18 @@ public class OpExecutorLDF extends OpExecutor {
         return QC.execute(op, input, ec2) ;
     }
 
-    private static BasicPattern reorder(BasicPattern pattern, QueryIterPeek peek, ReorderTransformation transform)
-    {
-        if ( transform != null )
-        {
+    private static BasicPattern reorder(BasicPattern pattern, QueryIterPeek peek, ReorderTransformation transform) {
+        if ( transform != null ) {
             // This works by getting one result from the peek iterator,
             // and creating the more gounded BGP. The tranform is used to
             // determine the best order and the transformation is returned. This
             // transform is applied to the unsubstituted pattern (which will be
             // substituted as part of evaluation.
 
-            if ( ! peek.hasNext() )
+            if ( ! peek.hasNext() ) {
                 throw new ARQInternalErrorException("Peek iterator is already empty") ;
-
+            }
+            
             BasicPattern pattern2 = Substitute.substitute(pattern, peek.peek() ) ;
             // Calculate the reordering based on the substituted pattern.
             ReorderProc proc = transform.reorderIndexes(pattern2) ;
@@ -168,28 +166,21 @@ public class OpExecutorLDF extends OpExecutor {
     }
 
     private static OpExecutorFactory plainFactory = new OpExecutorPlainFactoryLDF() ;
-    private static class OpExecutorPlainFactoryLDF implements OpExecutorFactory
-    {
+    private static class OpExecutorPlainFactoryLDF implements OpExecutorFactory {
         @Override
-        public OpExecutor create(ExecutionContext execCxt)
-        {
+        public OpExecutor create(ExecutionContext execCxt) {
             return new OpExecutorPlainLDF(execCxt) ;
         }
     }
 
     /** An op executor that simply executes a BGP or QuadPattern without any reordering */
-    private static class OpExecutorPlainLDF extends OpExecutor
-    {
-
-        @SuppressWarnings("unchecked")
-        public OpExecutorPlainLDF(ExecutionContext execCxt)
-        {
+    private static class OpExecutorPlainLDF extends OpExecutor {
+        public OpExecutorPlainLDF(ExecutionContext execCxt) {
             super(execCxt) ;
         }
 
         @Override
-        public QueryIterator execute(OpBGP opBGP, QueryIterator input)
-        {
+        public QueryIterator execute(OpBGP opBGP, QueryIterator input) {
             return super.execute(opBGP, input) ;
         }
     }

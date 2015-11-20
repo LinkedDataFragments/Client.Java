@@ -1,20 +1,31 @@
 package org.linkeddatafragments.model;
 
 
+import java.util.Iterator;
+
+import org.apache.commons.lang3.StringUtils;
+
 import com.github.fge.uritemplate.URITemplate;
 import com.github.fge.uritemplate.URITemplateException;
 import com.github.fge.uritemplate.vars.VariableMap;
 import com.github.fge.uritemplate.vars.VariableMapBuilder;
 import com.google.common.base.Strings;
-import com.hp.hpl.jena.graph.*;
-import com.hp.hpl.jena.rdf.model.*;
+import com.hp.hpl.jena.graph.Graph;
+import com.hp.hpl.jena.graph.GraphUtil;
+import com.hp.hpl.jena.graph.Node;
+import com.hp.hpl.jena.graph.NodeFactory;
+import com.hp.hpl.jena.graph.Triple;
+import com.hp.hpl.jena.graph.TripleMatchFilter;
+import com.hp.hpl.jena.rdf.model.Literal;
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.NodeIterator;
+import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.ResIterator;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.sparql.graph.GraphFactory;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
-import org.apache.commons.lang3.StringUtils;
-
-import java.net.MalformedURLException;
-import java.net.URLEncoder;
-import java.util.Iterator;
 
 public class LinkedDataFragment {
     public static final Resource RDF_PREDICATE = ResourceFactory.createResource("http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate");
@@ -30,66 +41,73 @@ public class LinkedDataFragment {
     protected String objectVariable;
     protected String template;
     protected URITemplate uriTemplate;
-    protected final TripleMatch tripleMatch;
+    protected final Triple tripleMatch;
 
-    public LinkedDataFragment(TripleMatch m) {
-        this.tripleMatch = m;
-        Graph g = GraphFactory.createJenaDefaultGraph();
-        g.add(m.asTriple());
-        this.tripleModel = ModelFactory.createModelForGraph(g);
+    public LinkedDataFragment(final Triple match) {
+        this.tripleMatch = match;
+        
+        final Graph graph = GraphFactory.createJenaDefaultGraph();
+        graph.add(match);
+        
+        this.tripleModel = ModelFactory.createModelForGraph(graph);
         this.matchCount = 1L;
-        this.triples = GraphUtil.findAll(g);
+        this.triples = GraphUtil.findAll(graph);
         //hydraParse(g);
     }
 
-    public LinkedDataFragment(TripleMatch m, Long matchCount) {
-        this.tripleMatch = m;
-        Graph g = GraphFactory.createJenaDefaultGraph();
+    public LinkedDataFragment(final Triple match, final Long matchCount) {
+        this.tripleMatch = match;
+        final Graph g = GraphFactory.createJenaDefaultGraph();
         if(matchCount > 0) {
-            g.add(m.asTriple());
+            g.add(match);
         }
+        
         this.tripleModel = ModelFactory.createModelForGraph(g);
         this.matchCount = matchCount;
         this.triples = GraphUtil.findAll(g);
         //hydraParse(g);
     }
 
-    public LinkedDataFragment(ExtendedIterator<Triple> triples, TripleMatch m) {
-        this.tripleMatch = m;
-        Long matchCount = 0L;
-        ExtendedIterator<Triple> iteratorTriples = triples;
-        Graph g = GraphFactory.createJenaDefaultGraph();
-        while (iteratorTriples.hasNext()) {
-            matchCount += 1;
-            g.add(iteratorTriples.next());
+    public LinkedDataFragment(final ExtendedIterator<Triple> triples, final Triple match) {
+        this.tripleMatch = match;
+        long matchCount = 0L;
+        
+        final Graph g = GraphFactory.createJenaDefaultGraph();
+        while (triples.hasNext()) {
+            g.add(triples.next());
+            matchCount++;
         }
+        
         this.tripleModel = ModelFactory.createModelForGraph(g);
         this.matchCount = matchCount;
         hydraParse(g);
     }
 
-    public LinkedDataFragment(Iterator<Triple> triples, Long matchCount, TripleMatch m) {
-        this.tripleMatch = m;
-        Graph g = GraphFactory.createJenaDefaultGraph();
+    public LinkedDataFragment(final Iterator<Triple> triples, final Long matchCount, final Triple match) {
+        this.tripleMatch = match;
+        
+        final Graph g = GraphFactory.createJenaDefaultGraph();
         GraphUtil.add(g, triples);
+        
         this.tripleModel = ModelFactory.createModelForGraph(g);
         this.matchCount = matchCount;
         hydraParse(g);
     }
 
-    protected void hydraParse(Graph g) {
+    protected void hydraParse(final Graph graph) {
         setUrl();
         setNextUrl();
         setFragmentUrl();
         setPattern();
         setTemplate();
         setMatchCount();
-        this.triples = GraphUtil.findAll(g)
-                .filterKeep(new TripleMatchFilter(this.tripleMatch.asTriple()))
+        this.triples = GraphUtil.findAll(graph)
+                .filterKeep(new TripleMatchFilter(this.tripleMatch))
                 .filterDrop(new TripleMatchFilter(new Triple(NodeFactory.createURI(url), Node.ANY, Node.ANY)))
                 .filterDrop(new TripleMatchFilter(new Triple(pattern.asNode(), Node.ANY, Node.ANY)))
                 .filterDrop(LinkedDataFragmentsConstants.HYDRA_VARIABLE)
                 .filterDrop(LinkedDataFragmentsConstants.HYDRA_PROPERTY);
+        
         if(fragmentNode != null) {
             this.triples = this.triples.filterDrop(new TripleMatchFilter(new Triple(fragmentNode.asNode(), Node.ANY, Node.ANY)));
         }
@@ -107,7 +125,7 @@ public class LinkedDataFragment {
         return url;
     }
 
-    public TripleMatch getTripleMatch() {
+    public Triple getTripleMatch() {
         return this.tripleMatch;
     }
 
@@ -172,7 +190,7 @@ public class LinkedDataFragment {
         return triplesNumber;
     }
 
-    public String getUrlToFragment(TripleMatch m) {
+    public String getUrlToFragment(Triple match) {
         NodeIterator it = getNodePatternIterator();
         while(it.hasNext()) {
             RDFNode mapping = it.next();
@@ -211,21 +229,21 @@ public class LinkedDataFragment {
         // Create a variable map, consisting of name/value pairs
         final VariableMapBuilder builder = VariableMap.newBuilder();
 
-        if(m.getMatchSubject() != null &&  m.getMatchSubject().isConcrete()) {
-            if(m.getMatchSubject().isURI()) {
-                builder.addScalarValue(subjectVariable, m.getMatchSubject().getURI());
+        if(match.getMatchSubject() != null &&  match.isConcrete()) {
+            if(match.getMatchSubject().isURI()) {
+                builder.addScalarValue(subjectVariable, match.getMatchSubject().getURI());
             } else {
-                builder.addScalarValue(subjectVariable, String.format("\"%s\"@%s", m.getMatchSubject().getLiteralLexicalForm(), m.getMatchSubject().getLiteralLanguage()));
+                builder.addScalarValue(subjectVariable, String.format("\"%s\"@%s", match.getMatchSubject().getLiteralLexicalForm(), match.getMatchSubject().getLiteralLanguage()));
             }
         }
-        if(m.getMatchPredicate() != null && m.getMatchPredicate().isConcrete()) {
-            builder.addScalarValue(predicateVariable, m.getMatchPredicate().getURI());
+        if(match.getMatchPredicate() != null && match.getMatchPredicate().isConcrete()) {
+            builder.addScalarValue(predicateVariable, match.getMatchPredicate().getURI());
         }
-        if(m.getMatchObject() != null && m.getMatchObject().isConcrete()) {
-            if(m.getMatchObject().isURI()) {
-                builder.addScalarValue(objectVariable, m.getMatchObject().getURI());
+        if(match.getMatchObject() != null && match.getMatchObject().isConcrete()) {
+            if(match.getMatchObject().isURI()) {
+                builder.addScalarValue(objectVariable, match.getMatchObject().getURI());
             } else {
-                builder.addScalarValue(objectVariable, String.format("\"%s\"@%s",m.getMatchObject().getLiteralLexicalForm(),m.getMatchObject().getLiteralLanguage()));
+                builder.addScalarValue(objectVariable, String.format("\"%s\"@%s",match.getMatchObject().getLiteralLexicalForm(),match.getMatchObject().getLiteralLanguage()));
                 //builder.addScalarValue(objectVariable, String.format("%s",m.getMatchObject().getLiteral()));
 
             }

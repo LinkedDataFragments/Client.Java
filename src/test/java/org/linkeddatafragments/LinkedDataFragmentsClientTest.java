@@ -1,20 +1,24 @@
 package org.linkeddatafragments;
 
-import com.google.common.base.Stopwatch;
-import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.query.*;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
+import static org.fest.assertions.Assertions.assertThat;
+
+import java.util.Iterator;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.linkeddatafragments.model.LinkedDataFragmentGraph;
 import org.linkeddatafragments.util.LDFTestUtils;
 
-import java.util.Iterator;
-import java.util.List;
-
-import static org.fest.assertions.Assertions.assertThat;
+import com.google.common.base.Stopwatch;
+import com.hp.hpl.jena.graph.Triple;
+import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.QueryExecution;
+import com.hp.hpl.jena.query.QueryExecutionFactory;
+import com.hp.hpl.jena.query.QueryFactory;
+import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 public class LinkedDataFragmentsClientTest {
     protected Model model;
@@ -161,7 +165,7 @@ public class LinkedDataFragmentsClientTest {
                 assertThat(rm.hasNext()).isTrue();
 
                 while(rm.hasNext()) {
-                    System.out.println(rm.next().asTriple().toString());
+                    System.out.println(rm.next().toString());
                 }
 
             } else if(qe.getQuery().getQueryType() == Query.QueryTypeSelect) {

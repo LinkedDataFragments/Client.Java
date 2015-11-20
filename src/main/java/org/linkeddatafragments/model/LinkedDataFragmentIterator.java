@@ -1,22 +1,24 @@
 package org.linkeddatafragments.model;
 
-import com.hp.hpl.jena.graph.TripleMatch;
-
 import java.util.Iterator;
 
 import org.linkeddatafragments.client.LinkedDataFragmentsClient;
 
+import com.hp.hpl.jena.graph.Triple;
+
 /**
- * Created by ldevocht on 4/25/14.
+ * 
+ * @author ldevocht
+ * @author agazzarini
  */
 public class LinkedDataFragmentIterator implements Iterator<LinkedDataFragment> {
     protected final LinkedDataFragment baseFragment;
-    protected final TripleMatch tripleTemplate;
+    protected final Triple tripleTemplate;
     protected final LinkedDataFragmentsClient ldfClient;
 
     protected LinkedDataFragment currentFragment;
 
-    public LinkedDataFragmentIterator(LinkedDataFragment ldf, LinkedDataFragmentsClient c) {
+    public LinkedDataFragmentIterator(final LinkedDataFragment ldf, final LinkedDataFragmentsClient c) {
         baseFragment = ldf;
         tripleTemplate = ldf.tripleMatch;
         currentFragment = baseFragment;

@@ -1,16 +1,15 @@
 package org.linkeddatafragments.model;
 
-import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.util.iterator.ExtendedIterator;
-import com.hp.hpl.jena.util.iterator.Filter;
-import com.hp.hpl.jena.util.iterator.Map1;
-import com.hp.hpl.jena.util.iterator.WrappedIterator;
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import org.linkeddatafragments.client.LinkedDataFragmentsClient;
+
+import com.hp.hpl.jena.graph.Triple;
+import com.hp.hpl.jena.util.iterator.ExtendedIterator;
+import com.hp.hpl.jena.util.iterator.Filter;
+import com.hp.hpl.jena.util.iterator.Map1;
 
 /**
  * Created by ldevocht on 4/29/14.

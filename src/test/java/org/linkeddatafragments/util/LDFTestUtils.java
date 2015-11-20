@@ -24,7 +24,7 @@ public class LDFTestUtils {
 
     public static List<String> readFiles(String directoryPath) {
         List<String> fileContents = Lists.newArrayList();
-        Iterator it = FileUtils.iterateFiles(new File(directoryPath), null, false);
+        Iterator<File> it = FileUtils.iterateFiles(new File(directoryPath), null, false);
         while(it.hasNext()){
             File file = ((File) it.next());
             System.out.println(file.getName());
