@@ -1,9 +1,6 @@
 package org.linkeddatafragments.model;
 
-import org.linkeddatafragments.model.LinkedDataFragment;
-
 import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.graph.TripleMatch;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 /**
@@ -14,19 +11,19 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  * To change this template use File | Settings | File Templates.
  */
 public class LinkedDataFragmentFactory {
-    public static LinkedDataFragment create(ExtendedIterator<Triple> triples, Long matchCount, TripleMatch m) {
-        return new LinkedDataFragment(triples, matchCount, m);
+    public static LinkedDataFragment create(final ExtendedIterator<Triple> triples, final Long matchCount, final Triple match) {
+        return new LinkedDataFragment(triples, matchCount, match);
     }
 
-    public static LinkedDataFragment create(ExtendedIterator<Triple> triples, TripleMatch m) {
-        return new LinkedDataFragment(triples, m);
+    public static LinkedDataFragment create(final ExtendedIterator<Triple> triples, final Triple match) {
+        return new LinkedDataFragment(triples, match);
     }
 
-    public static LinkedDataFragment create(TripleMatch m) {
-        return new LinkedDataFragment(m);
+    public static LinkedDataFragment create(final Triple match) {
+        return new LinkedDataFragment(match);
     }
 
-    public static LinkedDataFragment create(TripleMatch m, Long matchCount) {
-        return new LinkedDataFragment(m, matchCount);
+    public static LinkedDataFragment create(final Triple match, final Long matchCount) {
+        return new LinkedDataFragment(match, matchCount);
     }
 }

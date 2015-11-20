@@ -1,7 +1,18 @@
 package org.linkeddatafragments.model;
 
+import org.linkeddatafragments.client.LinkedDataFragmentsClient;
+import org.linkeddatafragments.solver.LDFStatistics;
+import org.linkeddatafragments.solver.LinkedDataFragmentEngine;
+import org.linkeddatafragments.solver.OpExecutorLDF;
+import org.linkeddatafragments.solver.ReorderTransformationLDF;
+
 import com.google.common.primitives.Ints;
-import com.hp.hpl.jena.graph.*;
+import com.hp.hpl.jena.graph.Capabilities;
+import com.hp.hpl.jena.graph.Graph;
+import com.hp.hpl.jena.graph.GraphStatisticsHandler;
+import com.hp.hpl.jena.graph.GraphUtil;
+import com.hp.hpl.jena.graph.Node;
+import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.graph.impl.GraphBase;
 import com.hp.hpl.jena.graph.impl.GraphMatcher;
 import com.hp.hpl.jena.query.ARQ;
@@ -13,12 +24,6 @@ import com.hp.hpl.jena.sparql.engine.optimizer.reorder.ReorderTransformation;
 import com.hp.hpl.jena.util.iterator.ClosableIterator;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 import com.hp.hpl.jena.util.iterator.WrappedIterator;
-
-import org.linkeddatafragments.client.LinkedDataFragmentsClient;
-import org.linkeddatafragments.solver.LDFStatistics;
-import org.linkeddatafragments.solver.LinkedDataFragmentEngine;
-import org.linkeddatafragments.solver.OpExecutorLDF;
-import org.linkeddatafragments.solver.ReorderTransformationLDF;
 
 public class LinkedDataFragmentGraph extends GraphBase {
     protected final LinkedDataFragmentsClient ldfClient;
@@ -64,9 +69,9 @@ public class LinkedDataFragmentGraph extends GraphBase {
     }
 
     @Override
-    protected ExtendedIterator<Triple> graphBaseFind(TripleMatch m) {
+    protected ExtendedIterator<Triple> graphBaseFind(Triple match) {
         try{
-            LinkedDataFragment ldf = ldfClient.getFragment(ldfClient.getBaseFragment(), m);
+            LinkedDataFragment ldf = ldfClient.getFragment(ldfClient.getBaseFragment(), match);
 //            ExtendedIterator<Triple> triples = ldf.getTriples();
 //            Iterator<LinkedDataFragment> ldfIterator = LinkedDataFragmentIterator.create(ldf, ldfClient);
 //            while(ldfIterator.hasNext()) {
@@ -81,10 +86,10 @@ public class LinkedDataFragmentGraph extends GraphBase {
         }
     }
 
-    public Long getCount(TripleMatch m) {
+    public Long getCount(final Triple match) {
         //System.out.println("count requested");
         try{
-            LinkedDataFragment ldf = ldfClient.getFragment(ldfClient.getBaseFragment(), m);
+            LinkedDataFragment ldf = ldfClient.getFragment(ldfClient.getBaseFragment(), match);
             Long count = ldf.getMatchCount();
             //System.out.println(String.format("%s found", count));
             return count;
@@ -128,9 +133,10 @@ public class LinkedDataFragmentGraph extends GraphBase {
      the algorithm (indeed, method) in <code>GraphMatcher</code>.
      */
     @Override
-    public boolean isIsomorphicWith( Graph g )
-    { checkOpen();
-        return g != null && GraphMatcher.equals(ldfClient.getBaseFragment().getGraph(), g); }
+    public boolean isIsomorphicWith( Graph g ) { 
+    	checkOpen();
+        return g != null && GraphMatcher.equals(ldfClient.getBaseFragment().getGraph(), g); 
+    }
 
     /**
      Answer a human-consumable representation of this graph. Not advised for
@@ -140,11 +146,15 @@ public class LinkedDataFragmentGraph extends GraphBase {
     /**
      Utility method: throw a ClosedException if this graph has been closed.
      */
-    protected void checkOpen()
-    { if (closed) throw new ClosedException( "already closed", ldfClient.getBaseFragment().getGraph() ); }
+    protected void checkOpen() { 
+    	if (closed) {
+    		throw new ClosedException( "already closed", ldfClient.getBaseFragment().getGraph() ); 
+    	}
+    }
 
-    @Override public String toString()
-    { return toString( (closed ? "closed " : ""), ldfClient.getBaseFragment().getGraph() ); }
+    @Override public String toString() { 
+    	return toString( (closed ? "closed " : ""), ldfClient.getBaseFragment().getGraph() ); 
+    }
 
     /**
      Answer a human-consumable representation of <code>that</code>. The
@@ -153,15 +163,13 @@ public class LinkedDataFragmentGraph extends GraphBase {
      default implementation will display all the triples exposed by the graph (ie
      including reification triples if it is Standard).
      */
-    public static String toString( String prefix, Graph that )
-    {
+    public static String toString( String prefix, Graph that ) {
         PrefixMapping pm = that.getPrefixMapping();
         StringBuffer b = new StringBuffer( prefix + " {" );
         int count = 0;
         String gap = "";
         ClosableIterator<Triple> it = GraphUtil.findAll(that);
-        while (it.hasNext() && count < TOSTRING_TRIPLE_LIMIT)
-        {
+        while (it.hasNext() && count < TOSTRING_TRIPLE_LIMIT) {
             b.append( gap );
             gap = "; ";
             count += 1;
@@ -172,10 +180,4 @@ public class LinkedDataFragmentGraph extends GraphBase {
         b.append( "}" );
         return b.toString();
     }
-
-    @Override
-    protected ExtendedIterator<Triple> graphBaseFind(Triple triple) {
-        return find(triple);
-    }
-
 }
