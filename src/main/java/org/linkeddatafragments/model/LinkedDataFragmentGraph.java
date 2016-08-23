@@ -1,19 +1,19 @@
 package org.linkeddatafragments.model;
 
 import com.google.common.primitives.Ints;
-import com.hp.hpl.jena.graph.*;
-import com.hp.hpl.jena.graph.impl.GraphBase;
-import com.hp.hpl.jena.graph.impl.GraphMatcher;
-import com.hp.hpl.jena.query.ARQ;
-import com.hp.hpl.jena.shared.AddDeniedException;
-import com.hp.hpl.jena.shared.ClosedException;
-import com.hp.hpl.jena.shared.PrefixMapping;
-import com.hp.hpl.jena.sparql.engine.main.QC;
-import com.hp.hpl.jena.sparql.engine.optimizer.reorder.ReorderTransformation;
-import com.hp.hpl.jena.util.iterator.ClosableIterator;
-import com.hp.hpl.jena.util.iterator.ExtendedIterator;
-import com.hp.hpl.jena.util.iterator.WrappedIterator;
 
+import org.apache.jena.graph.*;
+import org.apache.jena.graph.impl.GraphBase;
+import org.apache.jena.graph.impl.GraphMatcher;
+import org.apache.jena.query.ARQ;
+import org.apache.jena.shared.AddDeniedException;
+import org.apache.jena.shared.ClosedException;
+import org.apache.jena.shared.PrefixMapping;
+import org.apache.jena.sparql.engine.main.QC;
+import org.apache.jena.sparql.engine.optimizer.reorder.ReorderTransformation;
+import org.apache.jena.util.iterator.ClosableIterator;
+import org.apache.jena.util.iterator.ExtendedIterator;
+import org.apache.jena.util.iterator.WrappedIterator;
 import org.linkeddatafragments.client.LinkedDataFragmentsClient;
 import org.linkeddatafragments.solver.LDFStatistics;
 import org.linkeddatafragments.solver.LinkedDataFragmentEngine;
@@ -63,25 +63,25 @@ public class LinkedDataFragmentGraph extends GraphBase {
         return capabilities;
     }
 
-    @Override
-    protected ExtendedIterator<Triple> graphBaseFind(TripleMatch m) {
-        try{
-            LinkedDataFragment ldf = ldfClient.getFragment(ldfClient.getBaseFragment(), m);
-//            ExtendedIterator<Triple> triples = ldf.getTriples();
-//            Iterator<LinkedDataFragment> ldfIterator = LinkedDataFragmentIterator.create(ldf, ldfClient);
-//            while(ldfIterator.hasNext()) {
-//                ldf = ldfIterator.next();
-//                triples = triples.andThen(ldf.getTriples());
-//            }
-            ExtendedIterator<Triple> triples = ExtendedTripleIteratorLDF.create(ldfClient, ldf);
-            return triples;
-        } catch(Exception e) {
-            e.printStackTrace();
-            return WrappedIterator.emptyIterator(); //Do not block on error but return empty iterator
-        }
-    }
+//    @Override
+//    protected ExtendedIterator<Triple> graphBaseFind(Triple m) {
+//        try{
+//            LinkedDataFragment ldf = ldfClient.getFragment(ldfClient.getBaseFragment(), m);
+////            ExtendedIterator<Triple> triples = ldf.getTriples();
+////            Iterator<LinkedDataFragment> ldfIterator = LinkedDataFragmentIterator.create(ldf, ldfClient);
+////            while(ldfIterator.hasNext()) {
+////                ldf = ldfIterator.next();
+////                triples = triples.andThen(ldf.getTriples());
+////            }
+//            ExtendedIterator<Triple> triples = ExtendedTripleIteratorLDF.create(ldfClient, ldf);
+//            return triples;
+//        } catch(Exception e) {
+//            e.printStackTrace();
+//            return WrappedIterator.emptyIterator(); //Do not block on error but return empty iterator
+//        }
+//    }
 
-    public Long getCount(TripleMatch m) {
+    public Long getCount(Triple m) {
         //System.out.println("count requested");
         try{
             LinkedDataFragment ldf = ldfClient.getFragment(ldfClient.getBaseFragment(), m);

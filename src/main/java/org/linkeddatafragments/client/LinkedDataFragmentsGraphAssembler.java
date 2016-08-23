@@ -4,20 +4,17 @@ package org.linkeddatafragments.client;
  * Created by ldevocht on 4/28/14.
  */
 
-import com.hp.hpl.jena.sparql.util.graph.GraphUtils;
-
-import java.io.IOException;
-
+import org.apache.jena.assembler.Assembler;
+import org.apache.jena.assembler.Mode;
+import org.apache.jena.assembler.assemblers.AssemblerBase;
+import org.apache.jena.assembler.exceptions.AssemblerException;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.sparql.util.graph.GraphUtils;
 import org.linkeddatafragments.model.LinkedDataFragmentGraph;
 
-import com.hp.hpl.jena.assembler.Assembler;
-import com.hp.hpl.jena.assembler.Mode;
-import com.hp.hpl.jena.assembler.assemblers.AssemblerBase;
-import com.hp.hpl.jena.assembler.exceptions.AssemblerException;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.ResourceFactory;
 
 public class LinkedDataFragmentsGraphAssembler extends AssemblerBase implements Assembler {
 

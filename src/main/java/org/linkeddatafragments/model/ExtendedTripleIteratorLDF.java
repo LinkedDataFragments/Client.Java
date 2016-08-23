@@ -1,15 +1,16 @@
 package org.linkeddatafragments.model;
 
-import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.util.iterator.ExtendedIterator;
-import com.hp.hpl.jena.util.iterator.Filter;
-import com.hp.hpl.jena.util.iterator.Map1;
-import com.hp.hpl.jena.util.iterator.WrappedIterator;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
+import org.apache.jena.graph.Triple;
+import org.apache.jena.util.iterator.ExtendedIterator;
+import org.apache.jena.util.iterator.Filter;
+import org.apache.jena.util.iterator.Map1;
 import org.linkeddatafragments.client.LinkedDataFragmentsClient;
 
 /**
@@ -39,18 +40,18 @@ public class ExtendedTripleIteratorLDF implements ExtendedIterator<Triple> {
     }
 
     @Override
-    public ExtendedIterator<Triple> filterKeep(Filter<Triple> f) {
-        return triples.filterKeep(f);
+    public ExtendedIterator<Triple> filterKeep(Predicate<Triple> predicate) {
+        return triples.filterKeep(predicate);
     }
 
     @Override
-    public ExtendedIterator<Triple> filterDrop(Filter<Triple> f) {
-        return triples.filterDrop(f);
+    public ExtendedIterator<Triple> filterDrop(Predicate<Triple> predicate) {
+        return triples.filterDrop(predicate);
     }
 
     @Override
-    public <U> ExtendedIterator<U> mapWith(Map1<Triple, U> map1) {
-        return triples.mapWith(map1);
+    public <U> ExtendedIterator<U> mapWith(Function<Triple, U> function) {
+        return triples.mapWith(function);
     }
 
     @Override

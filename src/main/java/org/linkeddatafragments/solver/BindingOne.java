@@ -1,12 +1,12 @@
 package org.linkeddatafragments.solver;
 
+import org.apache.jena.atlas.iterator.Iter;
+import org.apache.jena.graph.Node;
+import org.apache.jena.sparql.core.Var;
+import org.apache.jena.sparql.engine.binding.Binding;
+
 import java.util.Iterator;
 
-import org.apache.jena.atlas.iterator.Iter;
-
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.sparql.core.Var;
-import com.hp.hpl.jena.sparql.engine.binding.Binding;
 
 /**
  * Copied from Jena distribution because the constructor was protected

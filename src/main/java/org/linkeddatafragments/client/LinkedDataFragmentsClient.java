@@ -3,15 +3,6 @@ package org.linkeddatafragments.client;
 import com.google.common.base.Optional;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.hp.hpl.jena.graph.Graph;
-import com.hp.hpl.jena.graph.GraphUtil;
-import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.graph.TripleMatch;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.reasoner.TriplePattern;
-import com.hp.hpl.jena.sparql.graph.GraphFactory;
-import com.hp.hpl.jena.util.iterator.WrappedIterator;
 
 import org.apache.http.Header;
 import org.apache.http.HeaderElement;
@@ -21,6 +12,13 @@ import org.apache.http.client.methods.HttpHead;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
+import org.apache.jena.graph.Graph;
+import org.apache.jena.graph.GraphUtil;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.reasoner.TriplePattern;
+import org.apache.jena.sparql.graph.GraphFactory;
 import org.linkeddatafragments.model.LinkedDataFragment;
 import org.linkeddatafragments.model.LinkedDataFragmentFactory;
 import org.linkeddatafragments.model.LinkedDataFragmentIterator;
@@ -61,11 +59,11 @@ public class LinkedDataFragmentsClient {
     }
 
 
-    public LinkedDataFragment getFragment(LinkedDataFragment baseFragment, TripleMatch pattern) throws Exception {
+    public LinkedDataFragment getFragment(LinkedDataFragment baseFragment, Triple pattern) throws Exception {
         //Boolean hasVariables;
         //Node s,p,o;
         String method = "GET";
-        TripleMatch tripleTemplate = pattern;
+        Triple tripleTemplate = pattern;
         TriplePattern p = new TriplePattern(pattern);
 
         // TODO: if looking for a specific triple (no variables), we can use shortcuts
@@ -91,7 +89,7 @@ public class LinkedDataFragmentsClient {
     // Triple patternT =
     //        Triple.create(Var.alloc("s"), Var.alloc("p"), Var.alloc("o"));
     // new TriplePattern(patternT);
-    public LinkedDataFragment getFragment(String method, String fragmentUrl, TripleMatch tripleTemplate) throws Exception {
+    public LinkedDataFragment getFragment(String method, String fragmentUrl, Triple tripleTemplate) throws Exception {
 //        String hash = "" + fragmentUrl.hashCode() + tripleTemplate.hashCode();
 //
 //        Optional<LinkedDataFragment> fragmentOptional = Optional.fromNullable(fragments.getIfPresent(hash));
@@ -118,7 +116,7 @@ public class LinkedDataFragmentsClient {
         } else {
             if(response.getStatusLine().getStatusCode() == 200) {
                 Graph g = GraphFactory.createJenaDefaultGraph();
-                g.add(tripleTemplate.asTriple());
+                g.add(tripleTemplate);
                 ldf = LinkedDataFragmentFactory.create(tripleTemplate); // do not send request if pattern was already fetched
             } else {
                 ldf = LinkedDataFragmentFactory.create(tripleTemplate, 0L);

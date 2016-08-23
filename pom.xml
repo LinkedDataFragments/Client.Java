@@ -33,15 +33,15 @@
           <groupId>org.apache.jena</groupId>
           <artifactId>apache-jena-libs</artifactId>
           <type>pom</type>
-          <version>2.13.0</version>
+          <version>3.1.0</version>
       </dependency>
 
 
-      <dependency>
+      <!--dependency>
           <groupId>com.hp.hpl.jena</groupId>
           <artifactId>jena</artifactId>
-          <version>2.6.4</version>
-      </dependency>
+          <version>3.1.0</version>
+      </dependency-->
 
       <dependency>
           <groupId>org.apache.httpcomponents</groupId>
@@ -97,6 +97,15 @@
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
+                </configuration>
+            </plugin>
+            <plugin> <!-- set compiler to 8.0 source -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
         </plugins>

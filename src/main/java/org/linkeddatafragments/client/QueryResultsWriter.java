@@ -2,10 +2,6 @@ package org.linkeddatafragments.client;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.query.*;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,7 +13,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Iterator;
 
-import com.hp.hpl.jena.shared.PrefixMapping;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.query.*;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.shared.PrefixMapping;
 import org.linkeddatafragments.model.LinkedDataFragmentGraph;
 import org.linkeddatafragments.utils.Config;
 
@@ -59,7 +59,7 @@ public class QueryResultsWriter {
         case Query.QueryTypeDescribe:
             final Iterator<Triple> triples = executor.execConstructTriples();
             while (triples.hasNext())
-                outputStream.println(triples.next().asTriple());
+                outputStream.println(triples.next());
             break;
         default:
             throw new Error("Unsupported query type");
