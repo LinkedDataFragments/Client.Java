@@ -21,13 +21,13 @@ public class LinkedDataFragmentsClientTest {
 
     @Before
     public void setUp() {
-        LinkedDataFragmentGraph ldfg = new LinkedDataFragmentGraph("http://data.linkeddatafragments.org/dbpedia");
+        LinkedDataFragmentGraph ldfg = new LinkedDataFragmentGraph("http://data.linkeddatafragments.org/dbpedia2014");
         model = ModelFactory.createModelForGraph(ldfg);
     }
 
     @Test
     public void testSize() {
-        assertThat(model.size()).isEqualTo(427670470);
+        assertThat(model.size()).isEqualTo(377367913);
         System.out.println(model.size());
     }
 
@@ -53,7 +53,7 @@ public class LinkedDataFragmentsClientTest {
         while(rs.hasNext()) {
             System.out.println(rs.nextSolution().toString());
         }
-
+        System.out.println("rs.getRowNumber() = " + rs.getRowNumber());
         assertThat(rs.getRowNumber()).isGreaterThan(0);
     }
 

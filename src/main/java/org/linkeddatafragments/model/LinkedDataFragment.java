@@ -86,13 +86,15 @@ public class LinkedDataFragment {
         setTemplate();
         setMatchCount();
         this.triples = GraphUtil.findAll(g)
-                .filterKeep(triple -> triple.matches(tripleMatch))
-                .filterDrop(triple -> triple.matches(new Triple(NodeFactory.createURI(url), Node.ANY, Node.ANY)))
-                .filterDrop(triple -> triple.matches(new Triple(pattern.asNode(), Node.ANY, Node.ANY)))
-                .filterDrop(triple -> triple.matches(LinkedDataFragmentsConstants.HYDRA_VARIABLE))
-                .filterDrop(triple -> triple.matches(LinkedDataFragmentsConstants.HYDRA_PROPERTY));
+                .filterKeep(triple -> tripleMatch.matches(triple))
+                .filterDrop(triple -> new Triple(NodeFactory.createURI(url), Node.ANY, Node.ANY).matches(triple))
+                .filterDrop(triple -> new Triple(pattern.asNode(), Node.ANY, Node.ANY).matches(triple))
+                .filterDrop(triple -> LinkedDataFragmentsConstants.HYDRA_VARIABLE.matches(triple))
+                .filterDrop(triple -> LinkedDataFragmentsConstants.HYDRA_PROPERTY.matches(triple));
+
         if(fragmentNode != null) {
-            this.triples = this.triples.filterDrop(triple -> triple.matches(new Triple(fragmentNode.asNode(), Node.ANY, Node.ANY)));
+            this.triples = this.triples.filterDrop(
+                    triple -> new Triple(fragmentNode.asNode(), Node.ANY, Node.ANY).matches(triple));
         }
     }
 

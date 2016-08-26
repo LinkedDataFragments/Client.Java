@@ -15,14 +15,17 @@ import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.GraphUtil;
 import org.apache.jena.graph.Triple;
+import org.apache.jena.query.Dataset;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.reasoner.TriplePattern;
+import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.sparql.graph.GraphFactory;
 import org.linkeddatafragments.model.LinkedDataFragment;
 import org.linkeddatafragments.model.LinkedDataFragmentFactory;
 import org.linkeddatafragments.model.LinkedDataFragmentIterator;
 
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
@@ -52,10 +55,34 @@ public class LinkedDataFragmentsClient {
     }
 
     public LinkedDataFragment getBaseFragment() {
-        Model fragmentTriples = ModelFactory.createDefaultModel();
-        fragmentTriples.read(this.dataSource, "TURTLE");
+        Dataset dataset = RDFDataMgr.loadDataset(this.dataSource);
+        Model fragmentTriples = getFragmentTriples(dataset);
         //GraphUtil.addInto(tripleModel,fragmentTriples.getGraph());
         return LinkedDataFragmentFactory.create(GraphUtil.findAll(fragmentTriples.getGraph()), fragmentTriples.size(), Triple.ANY);
+    }
+
+    /**
+     * Return all triples from the given dataset in one model, i.e., all graphs in the dataset are merged.
+     * @param dataset The dataset to get the model from
+     * @return  The model containing all triples from the graphs from the dataset.
+     */
+    private Model getFragmentTriples(final Dataset dataset) {
+        Model fragmentTriples = ModelFactory.createDefaultModel();
+
+        // add unnamed graph
+        Model defaultModel = dataset.getDefaultModel();
+        fragmentTriples.add(defaultModel);
+
+        // add named graph(s)
+        Iterator<String> names = dataset.listNames();
+        while (names.hasNext()) {
+            String name = names.next();
+            Model namedModel = dataset.getNamedModel(name);
+            fragmentTriples.add(namedModel);
+            namedModel.close();
+        }
+        dataset.close();
+        return fragmentTriples;
     }
 
 
@@ -98,19 +125,21 @@ public class LinkedDataFragmentsClient {
 //            return fragmentOptional.get();
 //        }
 
-        Model fragmentTriples = ModelFactory.createDefaultModel();
-        fragmentTriples.getReader().setProperty("WARN_UNQUALIFIED_RDF_ATTRIBUTE","EM_IGNORE");
-        fragmentTriples.getReader().setProperty("allowBadURIs","true");
+//        Model fragmentTriples = ModelFactory.createDefaultModel();
+//        fragmentTriples.getReader().setProperty("WARN_UNQUALIFIED_RDF_ATTRIBUTE","EM_IGNORE");
+//        fragmentTriples.getReader().setProperty("allowBadURIs","true");
 
-        HttpResponse response = getLinkedDataFragment(method, fragmentUrl);
+        HttpResponse response = getLinkedDataFragment("HEAD", fragmentUrl);
         //System.out.println(fragmentUrl);
         //String remoteUrl = baseFragment.getUrlToFragment(tripleTemplate);
         //fragmentTriples.read(remoteUrl,"TURTLE");
         LinkedDataFragment ldf;
-        if(method == "GET") {
-            InputStream in = parseLDFInputStream(response);
-            fragmentTriples.read(in, null, "TURTLE");
-
+        if(method.equals("GET")) {
+//            InputStream in = parseLDFInputStream(response);
+            Dataset dataset = RDFDataMgr.loadDataset(fragmentUrl);
+            Model fragmentTriples = getFragmentTriples(dataset);
+//            fragmentTriples.read(in, null, "TURTLE");
+            //fragmentTriples.write(System.out, "TURTLE");
             ldf = LinkedDataFragmentFactory.create(GraphUtil.findAll(fragmentTriples.getGraph()), fragmentTriples.size(), tripleTemplate);
 //        fragments.put(hash, ldf);
         } else {

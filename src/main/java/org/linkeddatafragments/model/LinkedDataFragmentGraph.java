@@ -63,23 +63,23 @@ public class LinkedDataFragmentGraph extends GraphBase {
         return capabilities;
     }
 
-//    @Override
-//    protected ExtendedIterator<Triple> graphBaseFind(Triple m) {
-//        try{
-//            LinkedDataFragment ldf = ldfClient.getFragment(ldfClient.getBaseFragment(), m);
-////            ExtendedIterator<Triple> triples = ldf.getTriples();
-////            Iterator<LinkedDataFragment> ldfIterator = LinkedDataFragmentIterator.create(ldf, ldfClient);
-////            while(ldfIterator.hasNext()) {
-////                ldf = ldfIterator.next();
-////                triples = triples.andThen(ldf.getTriples());
-////            }
-//            ExtendedIterator<Triple> triples = ExtendedTripleIteratorLDF.create(ldfClient, ldf);
-//            return triples;
-//        } catch(Exception e) {
-//            e.printStackTrace();
-//            return WrappedIterator.emptyIterator(); //Do not block on error but return empty iterator
-//        }
-//    }
+    @Override
+    protected ExtendedIterator<Triple> graphBaseFind(Triple m) {
+        try{
+            LinkedDataFragment ldf = ldfClient.getFragment(ldfClient.getBaseFragment(), m);
+//            ExtendedIterator<Triple> triples = ldf.getTriples();
+//            Iterator<LinkedDataFragment> ldfIterator = LinkedDataFragmentIterator.create(ldf, ldfClient);
+//            while(ldfIterator.hasNext()) {
+//                ldf = ldfIterator.next();
+//                triples = triples.andThen(ldf.getTriples());
+//            }
+            ExtendedIterator<Triple> triples = ExtendedTripleIteratorLDF.create(ldfClient, ldf);
+            return triples;
+        } catch(Exception e) {
+            e.printStackTrace();
+            return WrappedIterator.emptyIterator(); //Do not block on error but return empty iterator
+        }
+    }
 
     public Long getCount(Triple m) {
         //System.out.println("count requested");
@@ -173,9 +173,9 @@ public class LinkedDataFragmentGraph extends GraphBase {
         return b.toString();
     }
 
-    @Override
-    protected ExtendedIterator<Triple> graphBaseFind(Triple triple) {
-        return find(triple);
-    }
+//    @Override
+//    protected ExtendedIterator<Triple> graphBaseFind(Triple triple) {
+//        return find(triple);
+//    }
 
 }
