@@ -125,21 +125,20 @@ public class LinkedDataFragmentsClient {
 //            return fragmentOptional.get();
 //        }
 
-//        Model fragmentTriples = ModelFactory.createDefaultModel();
-//        fragmentTriples.getReader().setProperty("WARN_UNQUALIFIED_RDF_ATTRIBUTE","EM_IGNORE");
-//        fragmentTriples.getReader().setProperty("allowBadURIs","true");
+        Model fragmentTriples = ModelFactory.createDefaultModel();
+        fragmentTriples.getReader().setProperty("WARN_UNQUALIFIED_RDF_ATTRIBUTE","EM_IGNORE");
+        fragmentTriples.getReader().setProperty("allowBadURIs","true");
 
-        HttpResponse response = getLinkedDataFragment("HEAD", fragmentUrl);
+        HttpResponse response = getLinkedDataFragment("GET", fragmentUrl);
         //System.out.println(fragmentUrl);
         //String remoteUrl = baseFragment.getUrlToFragment(tripleTemplate);
         //fragmentTriples.read(remoteUrl,"TURTLE");
         LinkedDataFragment ldf;
         if(method.equals("GET")) {
-//            InputStream in = parseLDFInputStream(response);
-            Dataset dataset = RDFDataMgr.loadDataset(fragmentUrl);
-            Model fragmentTriples = getFragmentTriples(dataset);
-//            fragmentTriples.read(in, null, "TURTLE");
-            //fragmentTriples.write(System.out, "TURTLE");
+            InputStream in = parseLDFInputStream(response);
+//            Dataset dataset = RDFDataMgr.loadDataset(fragmentUrl);
+//            Model fragmentTriples = getFragmentTriples(dataset);
+            fragmentTriples.read(in, null, "TURTLE");
             ldf = LinkedDataFragmentFactory.create(GraphUtil.findAll(fragmentTriples.getGraph()), fragmentTriples.size(), tripleTemplate);
 //        fragments.put(hash, ldf);
         } else {
