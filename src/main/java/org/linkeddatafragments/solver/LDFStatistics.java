@@ -1,10 +1,10 @@
 package org.linkeddatafragments.solver;
 
+import org.apache.jena.graph.GraphStatisticsHandler;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.Triple;
 import org.linkeddatafragments.model.LinkedDataFragmentGraph;
 
-import com.hp.hpl.jena.graph.GraphStatisticsHandler;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.Triple;
 
 /**
  * @author ldevocht

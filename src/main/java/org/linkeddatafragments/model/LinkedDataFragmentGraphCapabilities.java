@@ -1,6 +1,7 @@
 package org.linkeddatafragments.model;
 
-import com.hp.hpl.jena.graph.Capabilities;
+
+import org.apache.jena.graph.Capabilities;
 
 public class LinkedDataFragmentGraphCapabilities implements Capabilities
 {

@@ -3,15 +3,6 @@ package org.linkeddatafragments.client;
 import com.google.common.base.Optional;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.hp.hpl.jena.graph.Graph;
-import com.hp.hpl.jena.graph.GraphUtil;
-import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.graph.TripleMatch;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.reasoner.TriplePattern;
-import com.hp.hpl.jena.sparql.graph.GraphFactory;
-import com.hp.hpl.jena.util.iterator.WrappedIterator;
 
 import org.apache.http.Header;
 import org.apache.http.HeaderElement;
@@ -21,10 +12,20 @@ import org.apache.http.client.methods.HttpHead;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
+import org.apache.jena.graph.Graph;
+import org.apache.jena.graph.GraphUtil;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.query.Dataset;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.reasoner.TriplePattern;
+import org.apache.jena.riot.RDFDataMgr;
+import org.apache.jena.sparql.graph.GraphFactory;
 import org.linkeddatafragments.model.LinkedDataFragment;
 import org.linkeddatafragments.model.LinkedDataFragmentFactory;
 import org.linkeddatafragments.model.LinkedDataFragmentIterator;
 
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
@@ -54,18 +55,42 @@ public class LinkedDataFragmentsClient {
     }
 
     public LinkedDataFragment getBaseFragment() {
-        Model fragmentTriples = ModelFactory.createDefaultModel();
-        fragmentTriples.read(this.dataSource, "TURTLE");
+        Dataset dataset = RDFDataMgr.loadDataset(this.dataSource);
+        Model fragmentTriples = getFragmentTriples(dataset);
         //GraphUtil.addInto(tripleModel,fragmentTriples.getGraph());
         return LinkedDataFragmentFactory.create(GraphUtil.findAll(fragmentTriples.getGraph()), fragmentTriples.size(), Triple.ANY);
     }
 
+    /**
+     * Return all triples from the given dataset in one model, i.e., all graphs in the dataset are merged.
+     * @param dataset The dataset to get the model from
+     * @return  The model containing all triples from the graphs from the dataset.
+     */
+    private Model getFragmentTriples(final Dataset dataset) {
+        Model fragmentTriples = ModelFactory.createDefaultModel();
 
-    public LinkedDataFragment getFragment(LinkedDataFragment baseFragment, TripleMatch pattern) throws Exception {
+        // add unnamed graph
+        Model defaultModel = dataset.getDefaultModel();
+        fragmentTriples.add(defaultModel);
+
+        // add named graph(s)
+        Iterator<String> names = dataset.listNames();
+        while (names.hasNext()) {
+            String name = names.next();
+            Model namedModel = dataset.getNamedModel(name);
+            fragmentTriples.add(namedModel);
+            namedModel.close();
+        }
+        dataset.close();
+        return fragmentTriples;
+    }
+
+
+    public LinkedDataFragment getFragment(LinkedDataFragment baseFragment, Triple pattern) throws Exception {
         //Boolean hasVariables;
         //Node s,p,o;
         String method = "GET";
-        TripleMatch tripleTemplate = pattern;
+        Triple tripleTemplate = pattern;
         TriplePattern p = new TriplePattern(pattern);
 
         // TODO: if looking for a specific triple (no variables), we can use shortcuts
@@ -91,7 +116,7 @@ public class LinkedDataFragmentsClient {
     // Triple patternT =
     //        Triple.create(Var.alloc("s"), Var.alloc("p"), Var.alloc("o"));
     // new TriplePattern(patternT);
-    public LinkedDataFragment getFragment(String method, String fragmentUrl, TripleMatch tripleTemplate) throws Exception {
+    public LinkedDataFragment getFragment(String method, String fragmentUrl, Triple tripleTemplate) throws Exception {
 //        String hash = "" + fragmentUrl.hashCode() + tripleTemplate.hashCode();
 //
 //        Optional<LinkedDataFragment> fragmentOptional = Optional.fromNullable(fragments.getIfPresent(hash));
@@ -104,21 +129,22 @@ public class LinkedDataFragmentsClient {
         fragmentTriples.getReader().setProperty("WARN_UNQUALIFIED_RDF_ATTRIBUTE","EM_IGNORE");
         fragmentTriples.getReader().setProperty("allowBadURIs","true");
 
-        HttpResponse response = getLinkedDataFragment(method, fragmentUrl);
+        HttpResponse response = getLinkedDataFragment("GET", fragmentUrl);
         //System.out.println(fragmentUrl);
         //String remoteUrl = baseFragment.getUrlToFragment(tripleTemplate);
         //fragmentTriples.read(remoteUrl,"TURTLE");
         LinkedDataFragment ldf;
-        if(method == "GET") {
+        if(method.equals("GET")) {
             InputStream in = parseLDFInputStream(response);
+//            Dataset dataset = RDFDataMgr.loadDataset(fragmentUrl);
+//            Model fragmentTriples = getFragmentTriples(dataset);
             fragmentTriples.read(in, null, "TURTLE");
-
             ldf = LinkedDataFragmentFactory.create(GraphUtil.findAll(fragmentTriples.getGraph()), fragmentTriples.size(), tripleTemplate);
 //        fragments.put(hash, ldf);
         } else {
             if(response.getStatusLine().getStatusCode() == 200) {
                 Graph g = GraphFactory.createJenaDefaultGraph();
-                g.add(tripleTemplate.asTriple());
+                g.add(tripleTemplate);
                 ldf = LinkedDataFragmentFactory.create(tripleTemplate); // do not send request if pattern was already fetched
             } else {
                 ldf = LinkedDataFragmentFactory.create(tripleTemplate, 0L);

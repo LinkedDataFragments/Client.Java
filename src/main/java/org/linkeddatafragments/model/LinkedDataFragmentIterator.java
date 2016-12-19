@@ -1,9 +1,8 @@
 package org.linkeddatafragments.model;
 
-import com.hp.hpl.jena.graph.TripleMatch;
-
 import java.util.Iterator;
 
+import org.apache.jena.graph.Triple;
 import org.linkeddatafragments.client.LinkedDataFragmentsClient;
 
 /**
@@ -11,7 +10,7 @@ import org.linkeddatafragments.client.LinkedDataFragmentsClient;
  */
 public class LinkedDataFragmentIterator implements Iterator<LinkedDataFragment> {
     protected final LinkedDataFragment baseFragment;
-    protected final TripleMatch tripleTemplate;
+    protected final Triple tripleTemplate;
     protected final LinkedDataFragmentsClient ldfClient;
 
     protected LinkedDataFragment currentFragment;

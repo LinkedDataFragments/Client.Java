@@ -1,18 +1,18 @@
 package org.linkeddatafragments.solver;
 
+import org.apache.jena.graph.GraphStatisticsHandler;
+import org.apache.jena.graph.Node;
+import org.apache.jena.sparql.engine.optimizer.Pattern;
+import org.apache.jena.sparql.engine.optimizer.StatsMatcher;
+import org.apache.jena.sparql.engine.optimizer.reorder.PatternTriple;
+import org.apache.jena.sparql.engine.optimizer.reorder.ReorderTransformationSubstitution;
+import org.apache.jena.sparql.graph.NodeConst;
+import org.apache.jena.sparql.sse.Item;
 import org.linkeddatafragments.model.LinkedDataFragmentGraph;
 
-import com.hp.hpl.jena.graph.GraphStatisticsHandler;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.sparql.engine.optimizer.Pattern;
-import com.hp.hpl.jena.sparql.engine.optimizer.StatsMatcher;
-import com.hp.hpl.jena.sparql.engine.optimizer.reorder.PatternTriple;
-import com.hp.hpl.jena.sparql.engine.optimizer.reorder.ReorderTransformationSubstitution;
-import com.hp.hpl.jena.sparql.graph.NodeConst;
-import com.hp.hpl.jena.sparql.sse.Item;
+import static org.apache.jena.sparql.engine.optimizer.reorder.PatternElements.TERM;
+import static org.apache.jena.sparql.engine.optimizer.reorder.PatternElements.VAR;
 
-import static com.hp.hpl.jena.sparql.engine.optimizer.reorder.PatternElements.TERM;
-import static com.hp.hpl.jena.sparql.engine.optimizer.reorder.PatternElements.VAR;
 
 /**
  * Reorders the Triple Patterns of a BGP by using statistics directly fetched from

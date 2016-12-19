@@ -12,6 +12,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <log4j.version>2.6.2</log4j.version>
   </properties>
 
   <dependencies>
@@ -25,7 +26,7 @@
       <dependency>
           <groupId>com.google.code.gson</groupId>
           <artifactId>gson</artifactId>
-          <version>2.2.4</version>
+          <version>2.7</version>
       </dependency>
 
 
@@ -33,20 +34,13 @@
           <groupId>org.apache.jena</groupId>
           <artifactId>apache-jena-libs</artifactId>
           <type>pom</type>
-          <version>2.13.0</version>
-      </dependency>
-
-
-      <dependency>
-          <groupId>com.hp.hpl.jena</groupId>
-          <artifactId>jena</artifactId>
-          <version>2.6.4</version>
+          <version>3.1.0</version>
       </dependency>
 
       <dependency>
           <groupId>org.apache.httpcomponents</groupId>
           <artifactId>httpasyncclient</artifactId>
-          <version>4.0</version>
+          <version>4.1.2</version>
       </dependency>
 
       <dependency>
@@ -58,27 +52,44 @@
       <dependency>
           <groupId>org.apache.commons</groupId>
           <artifactId>commons-lang3</artifactId>
-          <version>3.3.2</version>
+          <version>3.4</version>
       </dependency>
 
 
       <dependency>
           <groupId>commons-io</groupId>
           <artifactId>commons-io</artifactId>
-          <version>2.4</version>
+          <version>2.5</version>
       </dependency>
 
       <dependency>
           <groupId>com.github.fge</groupId>
           <artifactId>uri-template</artifactId>
-          <version>0.8</version>
+          <version>0.9</version>
       </dependency>
 
 
       <dependency>
           <groupId>com.google.guava</groupId>
           <artifactId>guava</artifactId>
-          <version>15.0</version>
+          <version>19.0</version>
+      </dependency>
+
+      <!-- Logging -->
+      <dependency>
+          <groupId>org.apache.logging.log4j</groupId>
+          <artifactId>log4j-api</artifactId>
+          <version>${log4j.version}</version>
+      </dependency>
+      <dependency>
+          <groupId>org.apache.logging.log4j</groupId>
+          <artifactId>log4j-core</artifactId>
+          <version>${log4j.version}</version>
+      </dependency>
+      <dependency> <!-- log4j logging to slf4j -->
+          <groupId>org.apache.logging.log4j</groupId>
+          <artifactId>log4j-slf4j-impl</artifactId>
+          <version>${log4j.version}</version>
       </dependency>
 
   </dependencies>
@@ -97,6 +108,15 @@
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
+                </configuration>
+            </plugin>
+            <plugin> <!-- set compiler to 8.0 source -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
         </plugins>
