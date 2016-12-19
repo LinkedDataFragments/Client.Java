@@ -1,5 +1,7 @@
 # Linked Data Fragments Client <img src="http://linkeddatafragments.org/images/logo.svg" width="100" align="right" alt="" />
 
+![Build Status](https://api.travis-ci.org/LinkedDataFragments/Client.Java.svg?branch=master)
+
 **This is a prototype implementation of a Linked Data Fragments client for the Jena stack.
 The recommended client is the [JavaScript implementation](https://github.com/LinkedDataFragments/Client.js/).**
 
