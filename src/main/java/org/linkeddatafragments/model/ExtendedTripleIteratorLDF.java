@@ -71,7 +71,6 @@ public class ExtendedTripleIteratorLDF implements ExtendedIterator<Triple> {
 
     @Override
     public boolean hasNext() {
-        waitForFragmentTriplesReady();
         Boolean hasNext = triples.hasNext();
         if(!hasNext) {
             if(ldfIterator.hasNext()) {
@@ -91,7 +90,6 @@ public class ExtendedTripleIteratorLDF implements ExtendedIterator<Triple> {
 
     @Override
     public Triple next() {
-        waitForFragmentTriplesReady();
         Boolean hasNext = triples.hasNext();
         if(!hasNext) {
             if(ldfIterator.hasNext()) {
